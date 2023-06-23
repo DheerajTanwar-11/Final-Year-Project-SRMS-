@@ -5,6 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/student.css">
     <title>Result</title>
+    <style>
+        /* CSS for the table */
+.table {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+/* Additional CSS styles for the result section and button */
+.result {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.button {
+  margin-top: 20px;
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* CSS for the name, class, and roll number table */
+.details-table {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.details-table th,
+.details-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.details-table th {
+  background-color: #f2f2f2;
+}
+
+/* CSS for the main result table */
+.main-table {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.main-table th,
+.main-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.main-table th {
+  background-color: #f2f2f2;
+}
+
+.button a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* Change this to the desired color */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.button a.logout-btn {
+    background-color: #dc3545; /* Change this to the desired color for the logout button */
+}
+
+.button a:hover {
+    background-color: #0056b3; /* Change this to the desired color on hover */
+}
+</style>
 </head>
 <body>
     <?php
@@ -30,7 +130,7 @@
         $name_sql=mysqli_query($conn,"SELECT `name` FROM `students` WHERE `rno`='$rn' and `class_name`='$class'");
         while($row = mysqli_fetch_assoc($name_sql))
         {
-        $name = $row['name'];
+            $name = $row['name'];
         }
 
         $result_sql=mysqli_query($conn,"SELECT `p1`, `p2`, `p3`, `p4`, `p5`, `marks`, `percentage` FROM `result` WHERE `rno`='$rn' and `class`='$class'");
@@ -48,42 +148,96 @@
             echo "no result";
             exit();
         }
+        $status = ($percentage >= 35) ? "Pass" : "Fail";
     ?>
 
     <div class="container">
-        <div class="details">
-            <span>Name:</span> <?php echo $name ?> <br>
-            <span>Class:</span> <?php echo $class; ?> <br>
-            <span>Roll No:</span> <?php echo $rn; ?> <br>
+        <table class="details-table">
+            <thead>
+                <tr>
+                    <th>NAME</th>
+                    <th>CLASS</th>
+                    <th>ROLL NUMBER</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><?php echo $name; ?></td>
+                    <td><?php echo $class; ?></td>
+                    <td><?php echo $rn; ?></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subjects</th>
+                        <th>Paper 1</th>
+                        <th>Paper 2</th>
+                        <th>Paper 3</th>
+                        <th>Paper 4</th>
+                        <th>Paper 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Marks</td>
+                        <td><?php echo $p1; ?></td>
+                        <td><?php echo $p2; ?></td>
+                        <td><?php echo $p3; ?></td>
+                        <td><?php echo $p4; ?></td>
+                        <td><?php echo $p5; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Total Marks</td>
+                        <td colspan="5"><?php echo $mark; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Percentage</td>
+                        <td colspan="5"><?php echo $percentage; ?>%</td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td colspan="5"><?php echo $status; ?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <div class="main">
-            <div class="s1">
-                <p>Subjects</p>
-                <p>Paper 1</p>
-                <p>Paper 2</p>
-                <p>Paper 3</p>
-                <p>Paper 4</p>
-                <p>Paper 5</p>
-            </div>
-            <div class="s2">
-                <p>Marks</p>
-                <?php echo '<p>'.$p1.'</p>';?>
-                <?php echo '<p>'.$p2.'</p>';?>
-                <?php echo '<p>'.$p3.'</p>';?>
-                <?php echo '<p>'.$p4.'</p>';?>
-                <?php echo '<p>'.$p5.'</p>';?>
-            </div>
-        </div>
-
-        <div class="result">
-            <?php echo '<p>Total Marks:&nbsp'.$mark.'</p>';?>
-            <?php echo '<p>Percentage:&nbsp'.$percentage.'%</p>';?>
-        </div>
-
         <div class="button">
-            <button onclick="window.download()">Download Result</button>
+            <button onclick="downloadResult()">Download Result</button>
+        </div>
+        <div class="button">
+            <a href="login.php" class="logout-btn">Logout</a>
         </div>
     </div>
+    <script>
+        function downloadResult(){
+                // Prepare the result data as a string (example data)
+                var resultData = "Name: <?php echo $name ?>\nClass: <?php echo $class; ?>\nRoll No: <?php echo $rn; ?>\n";
+                resultData += "Marks:\n";
+                resultData += "Paper 1: <?php echo $p1 ?>\n";
+                resultData += "Paper 2: <?php echo $p2 ?>\n";
+                resultData += "Paper 3: <?php echo $p3 ?>\n";
+                resultData += "Paper 4: <?php echo $p4 ?>\n";
+                resultData += "Paper 5: <?php echo $p5 ?>\n";
+                resultData += "Total Marks:<?php echo $mark; ?>\n";
+                resultData += "Percentage: <?php echo $percentage; ?>\n";
+                resultData += "Status: <?php echo $status; ?>";
+                // Create a temporary element to hold the result data
+                var tempElement = document.createElement('a');
+                tempElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(resultData);
+                tempElement.download = 'result.txt';
+
+                // Append the temporary element to the document body
+                document.body.appendChild(tempElement);
+
+                // Simulate a click event to trigger the download
+                tempElement.click();
+
+                // Remove the temporary element from the document body
+                 document.body.removeChild(tempElement);
+                }
+    </script>
 </body>
 </html>

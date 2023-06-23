@@ -15,7 +15,7 @@
     <div class="title">
         <a href="dashboard.php"><img alt="" class="logo"></a>
         <span class="heading">Dashboard</span>
-        <a href="logout.php" style="color: white"><span class="fa fa-sign-out fa-2x">Logout</span></a>
+        <a href="logout.php" style="color: white"><span class="fa fa-sign-out"></span></a>
     </div>
 
     <div class="nav">

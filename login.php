@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="title">
-        <span><a href="./index.html">Student Result Management System</a></span>
+        <span><a href="./index.html" style="text-decoration:none;color:white">Student Result Management System</a></span>
     </div>
 
     <div class="main">
